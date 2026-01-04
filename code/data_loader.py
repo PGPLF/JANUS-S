@@ -263,6 +263,178 @@ def load_covariance_matrix(cov_dir: str = 'data/jla/covmat',
     return cov
 
 
+def load_pantheon_covariance(filepath: str = 'data/pantheon/Pantheon+SH0ES_STAT+SYS.cov',
+                              verbose: bool = True) -> np.ndarray:
+    """
+    Charge la matrice de covariance Pantheon+ (stat + sys)
+
+    Format du fichier:
+    - Ligne 1 : dimension N (1701)
+    - Lignes suivantes : N*N valeurs de la matrice aplatie
+
+    Parametres
+    ----------
+    filepath : str
+        Chemin vers le fichier .cov
+    verbose : bool
+        Afficher les informations de chargement
+
+    Retourne
+    --------
+    cov : array (N x N)
+        Matrice de covariance complete
+    """
+    path = Path(filepath)
+
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Fichier covariance non trouve: {filepath}\n"
+            "Telechargez depuis: https://github.com/PantheonPlusSH0ES/DataRelease"
+        )
+
+    # Lecture du fichier
+    with open(filepath, 'r') as f:
+        lines = f.readlines()
+
+    # Premiere ligne = dimension
+    n_dim = int(lines[0].strip())
+
+    # Lire toutes les valeurs suivantes
+    values = []
+    for line in lines[1:]:
+        values.extend([float(x) for x in line.strip().split()])
+
+    # Verifier le nombre de valeurs
+    expected = n_dim * n_dim
+    if len(values) != expected:
+        raise ValueError(
+            f"Nombre de valeurs incorrect: {len(values)} vs {expected} attendues"
+        )
+
+    # Reshape en matrice carree
+    cov = np.array(values).reshape(n_dim, n_dim)
+
+    if verbose:
+        print(f"Matrice covariance Pantheon+ chargee: {n_dim}x{n_dim}")
+        print(f"Diagonale: [{cov[0,0]:.4f}, ..., {cov[-1,-1]:.4f}]")
+        print(f"Trace: {np.trace(cov):.2f}")
+
+    return cov
+
+
+def load_pantheon_with_covariance(data_path: str = 'data/pantheon/Pantheon+SH0ES.dat',
+                                   cov_path: str = 'data/pantheon/Pantheon+SH0ES_STAT+SYS.cov',
+                                   use_shoes: bool = True,
+                                   verbose: bool = True) -> Dict:
+    """
+    Charge Pantheon+ avec matrice de covariance complete
+
+    Parametres
+    ----------
+    data_path : str
+        Chemin vers le fichier de donnees
+    cov_path : str
+        Chemin vers le fichier de covariance
+    use_shoes : bool
+        Utiliser MU_SH0ES (modules de distance calibres) au lieu de mB
+    verbose : bool
+        Afficher les informations
+
+    Retourne
+    --------
+    data : dict
+        Dictionnaire avec donnees + covariance
+    """
+    path = Path(data_path)
+
+    if not path.exists():
+        raise FileNotFoundError(f"Fichier non trouve: {data_path}")
+
+    # Charger les donnees brutes
+    df = pd.read_csv(data_path, delim_whitespace=True, comment='#')
+
+    # Verifier que MU_SH0ES est present si demande
+    if use_shoes and 'MU_SH0ES' not in df.columns:
+        raise ValueError("Colonne MU_SH0ES non trouvee dans le fichier")
+
+    # Charger la covariance
+    cov = load_pantheon_covariance(cov_path, verbose=verbose)
+
+    # Verifier coherence dimensions
+    if len(df) != cov.shape[0]:
+        raise ValueError(
+            f"Incoherence: {len(df)} SNe vs covariance {cov.shape[0]}x{cov.shape[0]}"
+        )
+
+    # Extraire les erreurs diagonales de la covariance
+    sigma_mu = np.sqrt(np.diag(cov))
+
+    result = {
+        'z': df['zHD'].values,
+        'mu': df['MU_SH0ES'].values if use_shoes else None,
+        'sigma_mu': sigma_mu,
+        'mb': df['mB'].values if 'mB' in df.columns else None,
+        'x1': df['x1'].values if 'x1' in df.columns else None,
+        'color': df['c'].values if 'c' in df.columns else None,
+        'host_mass': df['HOST_LOGMASS'].values if 'HOST_LOGMASS' in df.columns else None,
+        'covariance': cov,
+        'n_sne': len(df),
+        'names': df['CID'].values if 'CID' in df.columns else np.arange(len(df)),
+        'dataset': 'Pantheon+',
+        'reference': 'Brout et al. (2022), Scolnic et al. (2022)'
+    }
+
+    if verbose:
+        print(f"\nDataset Pantheon+ charge: {result['n_sne']} supernovae")
+        print(f"Plage redshift: z = [{result['z'].min():.4f}, {result['z'].max():.4f}]")
+        if use_shoes:
+            print(f"Plage mu (MU_SH0ES): [{result['mu'].min():.2f}, {result['mu'].max():.2f}]")
+        print(f"Covariance: {cov.shape[0]}x{cov.shape[1]}, rang = {np.linalg.matrix_rank(cov)}")
+
+    return result
+
+
+def compute_chi2_with_covariance(mu_obs: np.ndarray,
+                                  mu_theory: np.ndarray,
+                                  cov: np.ndarray,
+                                  offset: float = 0.0) -> float:
+    """
+    Calcule chi2 avec matrice de covariance complete
+
+    chi2 = (mu_obs - mu_th - offset)^T @ Cov^{-1} @ (mu_obs - mu_th - offset)
+
+    Parametres
+    ----------
+    mu_obs : array
+        Modules de distance observes
+    mu_theory : array
+        Modules de distance theoriques
+    cov : array (N x N)
+        Matrice de covariance
+    offset : float
+        Offset a soustraire (nuisance parameter)
+
+    Retourne
+    --------
+    chi2 : float
+        Valeur du chi2
+    """
+    residuals = mu_obs - mu_theory - offset
+
+    # Inversion via Cholesky pour stabilite numerique
+    try:
+        L = np.linalg.cholesky(cov)
+        y = np.linalg.solve(L, residuals)
+        chi2 = np.dot(y, y)
+    except np.linalg.LinAlgError:
+        # Fallback: pseudo-inverse si matrice singuliere
+        warnings.warn("Matrice singuliere, utilisation pseudo-inverse")
+        cov_inv = np.linalg.pinv(cov)
+        chi2 = residuals @ cov_inv @ residuals
+
+    return chi2
+
+
 def filter_data(data: Dict,
                 z_min: float = 0.0,
                 z_max: float = np.inf,

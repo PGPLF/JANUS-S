@@ -311,9 +311,94 @@ JANUS reste compétitif avec un seul paramètre libre (q0).
 
 ---
 
+---
+
+## PLAN V1.0 - Extension MCMC et Dark Energy
+
+**Objectif:** MCMC complet (emcee + dynesty), modeles wCDM/CPL, 10 figures publication
+
+### Strategie de Versionnage
+- **V1.0** : Pantheon+ seul (1550 SNe) - analyse complete MCMC
+- **V1.1** : Pantheon+ + DES-SN5YR (~3000 SNe) - extension dataset
+
+### Choix Techniques
+- **MCMC** : emcee ET dynesty avec analyse comparative
+- **Dark Energy** : wCDM + CPL (w0-wa) analyse complete
+- **Regle** : Jamais effacer, toujours archiver
+
+### PHASE 1 : Preparation Donnees V1
+| Tache | Statut | Notes |
+|-------|--------|-------|
+| Telecharger covariances Pantheon+ | 🔄 En cours | Matrices stat+sys |
+| Integrer covariances data_loader.py | ⏳ Pending | Full-cov 1701x1701 |
+| Valider chi2 full-cov vs diagonal | ⏳ Pending | Impact attendu <20% |
+
+### PHASE 2 : MCMC Double (emcee + dynesty)
+| Tache | Statut | Notes |
+|-------|--------|-------|
+| Creer fitting_mcmc.py | ⏳ Pending | Framework unifie |
+| Implementation emcee | ⏳ Pending | 32 walkers, 5000 steps |
+| Implementation dynesty | ⏳ Pending | Nested sampling, evidence |
+| Analyse comparative | ⏳ Pending | Posteriors coherents <10% |
+
+### PHASE 3 : Sous-Echantillons
+| Tache | Statut | Notes |
+|-------|--------|-------|
+| Stratification redshift | ⏳ Pending | 5 bins z |
+| Stratification host mass | ⏳ Pending | </>10^10 Msun |
+| Parameterisation q(z) | ⏳ Pending | q0 + q1*z |
+
+### PHASE 4 : wCDM + CPL
+| Tache | Statut | Notes |
+|-------|--------|-------|
+| Implementation wCDM | ⏳ Pending | w constant |
+| Implementation CPL | ⏳ Pending | w0 + wa*(1-a) |
+| Comparaison 4 modeles | ⏳ Pending | JANUS/LCDM/wCDM/CPL |
+| Interpretation q0 <-> w | ⏳ Pending | Relation physique |
+
+### PHASE 5 : Figures Publication
+| Tache | Statut | Notes |
+|-------|--------|-------|
+| 10 figures PDF | ⏳ Pending | 300 DPI, colorblind-friendly |
+| 4 tables | ⏳ Pending | MCMC, AIC/BIC, subsamples, errors |
+
+### PHASE 6 : Article V1.0
+| Tache | Statut | Notes |
+|-------|--------|-------|
+| Redaction LaTeX | ⏳ Pending | article_v1.0.tex |
+| References (+5) | ⏳ Pending | DESI, DES, emcee, dynesty, corner |
+
+### PHASE 7 : Validation & Publication
+| Tache | Statut | Notes |
+|-------|--------|-------|
+| Script reproductible | ⏳ Pending | run_v1_analysis.py |
+| Tag Git v1.0 | ⏳ Pending | Apres validation |
+| Soumission arXiv | ⏳ Pending | astro-ph.CO |
+
+---
+
+### Fichiers V1 a Creer
+```
+code/fitting_mcmc.py          # MCMC emcee + dynesty
+code/dark_energy_models.py    # wCDM + CPL
+code/subsample_analysis.py    # Analyse par bins
+code/generate_v1_figures.py   # 10 figures
+code/run_v1_analysis.py       # Pipeline complet
+publications/article/article_v1.0.tex
+```
+
+### Dependances V1
+```
+emcee>=3.1, dynesty>=2.0, corner>=2.2, h5py>=3.0, tqdm>=4.60
+```
+
+---
+
 ## NOTES
 
 Ce projet vise à reproduire et compléter les travaux de Jean-Pierre Petit sur l'application du modèle cosmologique JANUS aux observations des supernovae de type Ia, en vue de publications scientifiques.
 
 **Dépôt GitHub :** https://github.com/PGPLF/JANUS-S
+
+**Regle projet :** Archiver, jamais effacer
 

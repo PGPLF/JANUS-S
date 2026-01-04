@@ -1,0 +1,329 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Plan saved to: ~/.claude/plans/nested-frolicking-shamir.md \'b7 /plan to edit\
+     JANUS-S Version 1.0 - Plan d'Implementation\
+\
+     Objectif Principal\
+\
+     Etendre l'analyse JANUS sur Pantheon+ complet avec methodes statistiques avancees (MCMC + covariances), demontrer la competitivite du modele JANUS face a LCDM, et souligner les tensions emergentes sur l'energie noire (w != -1, CPL evolution).\
+\
+     Strategie de Versionnage\
+\
+     - V1.0 : Pantheon+ seul (1550 SNe) - analyse complete MCMC\
+     - V1.1 : Pantheon+ + DES-SN5YR (~3000 SNe) - extension dataset\
+\
+     Choix Techniques Valides\
+\
+     - MCMC : emcee ET dynesty avec analyse comparative\
+     - Dark Energy : wCDM + CPL (w0-wa) analyse complete\
+     - Archivage : Jamais effacer, toujours archiver\
+\
+     ---\
+     PHASE 1 : Preparation des Donnees\
+\
+     1.1 Telechargement Donnees Completes\
+\
+     V1.0:\
+     - Pantheon+ complet depuis GitHub Scolnic et al. (1701 courbes, 1550 SNe uniques)\
+     - Matrices de covariance Pantheon+ (stat + sys)\
+\
+     Preparation V1.1:\
+     - Telecharger DES-SN5YR (2024) pour integration future\
+\
+     1.2 Integration Covariances\
+\
+     Fichiers a modifier: code/data_loader.py\
+     - Charger matrice covariance complete Pantheon+ (1701x1701)\
+     - Decomposer : C_stat + C_sys + C_cal + C_host\
+     - Implementer inversion efficace (Cholesky)\
+     - Valider : chi2 diagonal vs chi2 full-cov sur V0\
+\
+     1.3 Qualite des Donnees\
+\
+     - Filtrage qualite ameliore (x1, c, host mass)\
+     - Separer echantillons : spectro vs photo-z\
+     - Documenter cuts appliques\
+\
+     Validation Phase 1: chi2/dof full-cov proche de V0 diagonal\
+\
+     ---\
+     PHASE 2 : Implementation MCMC Double (emcee + dynesty)\
+\
+     2.1 Framework Bayesien\
+\
+     Fichier: code/fitting_mcmc.py (nouveau)\
+     - Implementer log-likelihood avec covariance complete\
+     - Priors : q0 ~ Uniform(-0.5, 0), offset ~ Uniform(-5, 5)\
+     - Fonction unifiee pour les deux samplers\
+\
+     2.2 Implementation emcee\
+\
+     - Configuration : 32 walkers, 5000 steps, burn-in 1000\
+     - Sampler JANUS (q0, offset)\
+     - Sampler LCDM (Omega_m, offset)\
+     - Diagnostics : autocorrelation, acceptance rate\
+     - Corner plots avec corner\
+\
+     2.3 Implementation dynesty\
+\
+     - Nested sampling pour calcul evidence automatique\
+     - Sampler JANUS et LCDM\
+     - Extraction : log(Z), posteriors, credible intervals\
+     - Comparaison Bayes factor : ln(B_JANUS/B_LCDM)\
+\
+     2.4 Analyse Comparative emcee vs dynesty\
+\
+     - Comparer posteriors (coherence attendue)\
+     - Comparer temps de calcul\
+     - Valider : erreurs similaires a < 10%\
+     - Documenter avantages/inconvenients de chaque methode\
+\
+     2.5 Metriques de Selection\
+\
+     - Bayes factor (via dynesty evidence)\
+     - AIC/BIC (via emcee best-fit)\
+     - DIC (Deviance Information Criterion)\
+\
+     Validation Phase 2: Posteriors coherents entre emcee/dynesty et avec bootstrap V0\
+\
+     ---\
+     PHASE 3 : Analyse par Sous-Echantillons (2 jours)\
+\
+     3.1 Stratification Redshift\
+\
+     Script: code/subsample_analysis.py (nouveau)\
+     - Bins : z < 0.1, 0.1-0.3, 0.3-0.5, 0.5-1.0, z > 1.0\
+     - MCMC sur chaque bin\
+     - Evolution q0(z) avec erreurs MCMC\
+\
+     3.2 Stratification Host Galaxy\
+\
+     - Masse stellaire hote (< 10^10 Msun vs > 10^10 Msun)\
+     - Test step-mass correction\
+     - Impact sur q0\
+\
+     3.3 Tests de Robustesse\
+\
+     - Retirer outliers 3-sigma, refitter\
+     - Varier cuts x1, c\
+     - Comparer spectro vs photo-z only\
+\
+     3.4 Parameterisation q(z)\
+\
+     - Modele etendu : q(z) = q0 + q1*z\
+     - Fit 2-parametres JANUS\
+     - Comparer AIC/BIC avec JANUS-1param et LCDM\
+\
+     Validation Phase 3: Evolution q0(z) confirmee avec erreurs robustes\
+\
+     ---\
+     PHASE 4 : Analyse Tensions Energie Noire (wCDM + CPL)\
+\
+     4.1 Implementation wCDM\
+\
+     Fichier: code/dark_energy_models.py (nouveau)\
+     - E(z) = sqrt(Omega_m*(1+z)^3 + Omega_DE*(1+z)^(3(1+w)))\
+     - Priors : Omega_m ~ Uniform(0.1, 0.5), w ~ Uniform(-2, 0)\
+     - MCMC emcee + dynesty pour (Omega_m, w, offset)\
+     - Posteriors et contours 2D (Omega_m, w)\
+\
+     4.2 Implementation CPL (w0-wa)\
+\
+     - w(a) = w0 + wa*(1-a) avec a = 1/(1+z)\
+     - Priors : w0 ~ Uniform(-2, 0), wa ~ Uniform(-3, 3)\
+     - MCMC pour (Omega_m, w0, wa, offset)\
+     - Contours 2D (w0, wa) - comparer avec DESI/Planck\
+     - Detecter deviation de (w0, wa) = (-1, 0)\
+\
+     4.3 Hierarchie des Modeles\
+\
+     | Modele | Params libres       | Description             |\
+     |--------|---------------------|-------------------------|\
+     | JANUS  | 1 (q0)              | Deceleration constante  |\
+     | LCDM   | 1 (Omega_m)         | Constante cosmologique  |\
+     | wCDM   | 2 (Omega_m, w)      | Energie noire constante |\
+     | CPL    | 3 (Omega_m, w0, wa) | Energie noire evolutive |\
+\
+     - Comparer tous les modeles : chi2, AIC, BIC, Bayes factor\
+     - Classer par parsimonie (moins de params = mieux si chi2 similaire)\
+\
+     4.4 Interpretation Physique JANUS vs wCDM\
+\
+     - Relation q0 <-> w effectif : q0 = (1+3w*Omega_DE)/2\
+     - Montrer que q0 ~ -0.04 correspond a w ~ -0.7 a -0.9\
+     - Argument : JANUS predit naturellement w != -1 sans parametre ad hoc\
+\
+     4.5 Contexte Tensions Cosmologiques\
+\
+     - Citer Brout et al. 2022 : hints w != -1 dans Pantheon+\
+     - Citer DESI 2024 : evidence pour evolution w(z)\
+     - Citer Planck 2020 : contraintes CMB\
+     - Positionner JANUS comme resolution naturelle sans dark energy\
+\
+     Validation Phase 4: Contraintes w coherentes avec litterature, JANUS competitif\
+\
+     ---\
+     PHASE 5 : Visualisations Publication (2 jours)\
+\
+     5.1 Figures Principales\
+\
+     Script: code/generate_v1_figures.py (nouveau)\
+     - Fig 1 : Hubble diagram Pantheon+ complet (1550 SNe)\
+     - Fig 2 : Residus JANUS vs LCDM vs wCDM vs CPL\
+     - Fig 3 : Corner plot JANUS (q0, offset) - emcee\
+     - Fig 4 : Corner plot LCDM (Omega_m, offset) - emcee\
+     - Fig 5 : Corner plot wCDM (Omega_m, w, offset)\
+     - Fig 6 : Contours (w0, wa) CPL avec point LCDM (-1, 0)\
+     - Fig 7 : Evolution q0(z) avec bandes 68%/95%\
+     - Fig 8 : Comparaison chi2/dof tous modeles\
+     - Fig 9 : Bayes factors (ln B) relatifs a LCDM\
+     - Fig 10 : emcee vs dynesty posteriors (validation)\
+\
+     5.2 Tables\
+\
+     - Table 1 : Resultats MCMC tous modeles\
+     - Table 2 : Comparaison AIC/BIC/Bayes factor\
+     - Table 3 : Resultats par sous-echantillons\
+     - Table 4 : Budget erreurs systematiques\
+\
+     5.3 Format Publication\
+\
+     - Resolution 300 DPI, fonts serif\
+     - Couleurs accessibles (colorblind-friendly)\
+     - Versions PDF + PNG\
+\
+     Validation Phase 5: Figures prete pour soumission\
+\
+     ---\
+     PHASE 6 : Redaction Article V1 (3 jours)\
+\
+     6.1 Structure Article\
+\
+     Fichier: publications/article/article_v1.0.tex\
+     - Abstract (250 mots)\
+     - Introduction (contexte LCDM, tensions, JANUS alternative)\
+     - Theoretical Framework (JANUS, LCDM, wCDM equations)\
+     - Data (Pantheon+ description, quality cuts)\
+     - Methodology (MCMC, covariances, model comparison)\
+     - Results (5 sections : full-sample, subsamples, q(z), w comparison, model selection)\
+     - Discussion (interpretation physique, limites, perspectives)\
+     - Conclusion\
+     - Appendices (details techniques)\
+\
+     6.2 Points Cles a Mettre en Avant\
+\
+     1. JANUS ajuste SNe Ia avec 1 seul parametre libre\
+     2. chi2/dof comparable LCDM (difference < 5%)\
+     3. Evolution q0(z) detectee : limitation ou physique?\
+     4. Coherence avec tensions w != -1 de Pantheon+/DESI\
+     5. Parsimonie : JANUS vs dark energy ad hoc\
+\
+     6.3 References\
+\
+     - Ajouter Brout et al. 2022, DESI 2024, Planck 2020\
+     - Citer software : emcee, corner, astropy\
+     - Data availability statement\
+\
+     Validation Phase 6: Article complet, pret pour review interne\
+\
+     ---\
+     PHASE 7 : Validation Finale et Publication (2 jours)\
+\
+     7.1 Reproductibilite\
+\
+     - Script unique run_v1_analysis.py qui reproduit tout\
+     - Verifier seeds aleatoires fixes\
+     - Documenter environnement (requirements.txt)\
+\
+     7.2 Review Interne\
+\
+     - Relecture complete article\
+     - Verification chiffres tables vs code\
+     - Coherence figures/texte\
+\
+     7.3 Archivage\
+\
+     - Archiver V0 dans publications/article/archives/\
+     - Tag Git v1.0\
+     - README.md mis a jour\
+\
+     7.4 Soumission\
+\
+     - Cible : arXiv astro-ph.CO + Astrophysics and Space Science\
+     - Format journal (A&A style si necessaire)\
+     - Cover letter\
+\
+     ---\
+     Fichiers a Creer/Modifier\
+\
+     Nouveaux Fichiers\
+\
+     code/fitting_mcmc.py          # MCMC emcee + dynesty unifie\
+     code/dark_energy_models.py    # wCDM + CPL implementations\
+     code/subsample_analysis.py    # Analyse par bins z\
+     code/generate_v1_figures.py   # 10 figures V1\
+     code/run_v1_analysis.py       # Pipeline complet reproductible\
+     publications/article/article_v1.0.tex\
+     data/des/                     # Preparation DES-SN5YR pour V1.1\
+\
+     Fichiers a Modifier\
+\
+     code/janus_model.py           # Refactoring pour integration MCMC\
+     code/data_loader.py           # Covariances completes Pantheon+\
+     code/fitting.py               # Hooks vers fitting_mcmc\
+     LOG.md                        # Documentation V1\
+     references.bib                # +5 refs (DESI, DES, emcee, dynesty, corner)\
+     requirements.txt              # Dependances MCMC\
+\
+     Fichiers Archives (ne pas effacer)\
+\
+     publications/article/archives/article_v0.1.tex  # Original V0\
+     publications/article/archives/article_v0.1_compact.tex\
+\
+     ---\
+     Criteres de Succes V1\
+\
+     1. MCMC double fonctionnel : emcee ET dynesty produisent posteriors coherents\
+     2. Posteriors JANUS : q0 = -0.03 a -0.05 avec erreurs MCMC (Pantheon+)\
+     3. Covariances integrees : Impact quantifie (attendu < 20% sur erreurs)\
+     4. Evolution q0(z) confirmee : Deviation > 2 sigma entre bins\
+     5. Analyse wCDM/CPL complete : Contraintes w comparables litterature\
+     6. Interpretation physique : Relation q0 <-> w etablie\
+     7. Bayes factor : Comparaison JANUS/LCDM/wCDM/CPL documentee\
+     8. 10 figures publication : Resolution 300 DPI, format A&A/ApJ\
+     9. Code reproductible : run_v1_analysis.py reproduit tout en une commande\
+\
+     ---\
+     Dependances Python V1\
+\
+     # requirements_v1.txt\
+     numpy>=1.21\
+     scipy>=1.7\
+     matplotlib>=3.5\
+     astropy>=5.0\
+     emcee>=3.1           # MCMC affine-invariant\
+     dynesty>=2.0         # Nested sampling\
+     corner>=2.2          # Corner plots\
+     h5py>=3.0            # Sauvegarde chains\
+     tqdm>=4.60           # Progress bars\
+\
+     ---\
+     Resume Executif\
+\
+     V1.0 = Pantheon+ + MCMC double + wCDM/CPL + 10 figures\
+\
+     Ameliorations majeures vs V0 :\
+     - Methode : Chi2 diagonal -> MCMC full-cov (emcee + dynesty)\
+     - Modeles : JANUS/LCDM -> + wCDM + CPL\
+     - Figures : 4 -> 10 (corners, contours w0-wa)\
+     - Evidence : Bootstrap -> Bayes factors\
+     - Interpretation : q0 evolution -> lien avec tensions dark energy\
+\
+     V1.1 (futur) = V1.0 + DES-SN5YR (~3000 SNe total)\
+\
+}
