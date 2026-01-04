@@ -79,10 +79,10 @@
 ### PHASE 1 : DONNEES
 | Tâche | Statut | Notes |
 |-------|--------|-------|
-| Télécharger JLA (740 SNe) | ⬜ À faire | supernovae.in2p3.fr |
-| Télécharger Pantheon+ (1550 SNe) | ⬜ À faire | github.com/PantheonPlusSH0ES |
-| Extraire et organiser les fichiers | ⬜ À faire | data/jla/, data/pantheon/ |
-| Valider chargement avec data_loader.py | ⬜ À faire | Test unitaire |
+| Télécharger JLA (740 SNe) | ✅ Fait | 22.6 MB, supernovae.in2p3.fr |
+| Télécharger Pantheon+ (1701 SNe) | ✅ Fait | GitHub PantheonPlusSH0ES |
+| Extraire et organiser les fichiers | ✅ Fait | data/jla/, data/pantheon/ |
+| Valider chargement avec data_loader.py | ✅ Fait | JLA: 740, Pantheon+: 1701 SNe |
 
 ### PHASE 2 : REPRODUCTION 2018
 | Tâche | Statut | Notes |
@@ -147,14 +147,14 @@
 
 | Phase | Avancement |
 |-------|------------|
-| 1. Données | 0% |
+| 1. Données | 100% |
 | 2. Reproduction 2018 | 0% |
 | 3. Extension Pantheon+ | 0% |
 | 4. Comparaison | 0% |
 | 5. Figures & Tables | 0% |
 | 6. Rédaction | 0% |
 | 7. PDF Final | 0% |
-| **TOTAL** | **0%** |
+| **TOTAL** | **~13%** |
 
 ---
 
