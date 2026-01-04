@@ -64,7 +64,8 @@
 | -- | Création janus_model.py (modèle JANUS + Lambda-CDM) | ✅ Succès |
 | -- | Création data_loader.py (chargement JLA/Pantheon+) | ✅ Succès |
 | -- | Création fitting.py (ajustement chi-2, comparaison) | ✅ Succès |
-| -- | Commit v3 : Plan publication + code base | ⏳ En cours |
+| -- | Commit v3 : Plan publication + code base | ✅ Succès |
+| -- | Push v3 vers GitHub | ✅ Succès |
 
 ---
 
