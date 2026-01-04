@@ -90,13 +90,26 @@
 | -- | **Phase 7 : Production PDF** | ✅ Succès |
 | -- | Compilation pdflatex | ✅ Succès |
 | -- | article.pdf généré (420 KB, 8 pages) | ✅ Succès |
+| -- | **Git commit & push** | ✅ Succès |
+| -- | Commit 4a8e7b7: Publication V0 complete | ✅ Succès |
+| -- | Push vers GitHub PGPLF/JANUS-S | ✅ Succès |
+| -- | **Mise à jour v0.1** | ✅ Succès |
+| -- | Ajout auteur: Patrick Guerin (pg@gfo.bzh) | ✅ Succès |
+| -- | Ajout: contributions, funding, conflicts | ✅ Succès |
+| -- | Format two-column (style JANUS-Z v17) | ✅ Succès |
+| -- | article_v0.1.pdf généré (7 pages, 529 KB) | ✅ Succès |
 
 ---
 
 ## PLAN DE PUBLICATION V0 - SUIVI
 
 **Objectif :** Publication comparative reproduction 2018 + validation Pantheon+
-**Livrable :** `publications/article/article.pdf`
+**Livrable :** `publications/article/article_v0.1.pdf`
+
+### HISTORIQUE DES VERSIONS
+| Version | Date | Description |
+|---------|------|-------------|
+| v0.1 | 2026-01-04 | Version initiale avec auteur, acknowledgments, format JANUS-Z |
 
 ---
 
@@ -258,8 +271,8 @@ JANUS reste compétitif avec un seul paramètre libre (q0).
 
 **Fichiers du projet :**
 - `publications/PLAN_PUBLICATION_COMPARATIVE.md`
-- `publications/article/article.tex` (source LaTeX)
-- `publications/article/article.pdf` (VERSION V0 FINALE)
+- `publications/article/article_v0.1.tex` (source LaTeX v0.1)
+- `publications/article/article_v0.1.pdf` (VERSION V0.1 COURANTE)
 - `code/janus_model.py`
 - `code/data_loader.py`
 - `code/fitting.py`

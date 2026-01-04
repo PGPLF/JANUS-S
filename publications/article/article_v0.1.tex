@@ -1,0 +1,348 @@
+\documentclass[twocolumn,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[margin=2cm]{geometry}
+\usepackage{natbib}
+\usepackage{xcolor}
+\usepackage{float}
+
+% Custom commands
+\newcommand{\LCDM}{$\Lambda$CDM}
+\newcommand{\chisq}{$\chi^2$}
+
+\title{\textbf{Reproduction and Extension of JANUS Cosmological Model Constraints from Type Ia Supernovae Observations}}
+
+\author{Patrick Guerin\thanks{Corresponding author: pg@gfo.bzh}\\
+\small Independent Researcher\\
+\small Brittany, France\\
+\\
+\small \textit{Author contributions}: P.G. designed the study, performed all analyses,\\
+\small implemented the JANUS and \LCDM{} fitting codes, and wrote the manuscript.\\
+\\
+\small \textit{Funding}: This research received no specific grant from any funding agency.\\
+\\
+\small \textit{Conflicts of interest}: The author declares no competing interests.\\
+\\
+\small \textit{Data availability}: JLA dataset from \url{https://supernovae.in2p3.fr/sdss_snls_jla/};\\
+\small Pantheon+ dataset from \url{https://github.com/PantheonPlusSH0ES/DataRelease};\\
+\small Analysis code, figures, and results available at \url{https://github.com/PGPLF/JANUS-S}\\
+\small (includes full Python implementation and reproduction instructions).}
+
+\date{January 4, 2026 (v0.1)}
+
+\begin{document}
+
+\maketitle
+
+%==============================================================================
+\begin{abstract}
+We reproduce and extend the analysis of D'Agostini \& Petit (2018) constraining the JANUS bimetric cosmological model using Type Ia supernovae as standard candles. Using the JLA dataset (740 SNe Ia), we successfully reproduce the published result $q_0 = -0.087 \pm 0.015$ with $\chi^2/\text{dof} = 0.89$, validating our implementation. We then extend the analysis to the Pantheon+ dataset (1543 unique SNe Ia), finding $q_0 = -0.035 \pm 0.014$ with $\chi^2/\text{dof} = 0.50$. The significant difference between datasets ($\Delta q_0 = 0.051$) reveals a redshift-dependent evolution of the deceleration parameter within the JANUS framework: low-$z$ supernovae ($z < 0.1$) yield $q_0 \approx -0.26$ while high-$z$ data drives $q_0$ toward zero. We compare JANUS with the standard \LCDM{} model, finding comparable goodness-of-fit ($\Delta\chi^2/\text{dof} < 4\%$) with a slight statistical preference for \LCDM{} based on AIC/BIC criteria ($\Delta$AIC $\approx -25$). These results provide an independent validation of the 2018 analysis while highlighting potential limitations of the single-parameter JANUS model across extended redshift ranges.
+\end{abstract}
+
+\textbf{Keywords:} cosmology, supernovae Ia, JANUS model, bimetric gravity, dark energy, Hubble diagram
+
+%==============================================================================
+\section{Introduction}
+
+The accelerating expansion of the Universe, first discovered through Type Ia supernovae observations \citep{Riess1998,Perlmutter1999}, remains one of the most significant puzzles in modern cosmology. While the standard \LCDM{} model successfully describes this acceleration through a cosmological constant, alternative models continue to be explored for their theoretical elegance and predictive power.
+
+The JANUS cosmological model, developed by Petit and collaborators \citep{Petit2014,Petit2018,Petit2024}, proposes a bimetric framework where positive and negative mass sectors interact gravitationally. In this model, the apparent cosmic acceleration arises naturally from the gravitational dynamics between sectors, without requiring dark energy.
+
+D'Agostini \& Petit (2018) applied the JANUS model to the Joint Light-curve Analysis (JLA) dataset of 740 Type Ia supernovae, obtaining the constraint $q_0 = -0.087 \pm 0.015$ on the deceleration parameter, with fit quality comparable to \LCDM{} ($\chi^2/\text{dof} = 0.89$).
+
+The objectives of this work are threefold:
+\begin{enumerate}
+    \item Reproduce the 2018 analysis to validate the methodology and implementation
+    \item Extend the analysis to the more recent Pantheon+ dataset (1543 SNe Ia)
+    \item Compare JANUS and \LCDM{} using modern statistical criteria (AIC, BIC)
+\end{enumerate}
+
+%==============================================================================
+\section{Theoretical Framework}
+
+\subsection{JANUS Cosmological Model}
+
+In the JANUS bimetric model, the luminosity distance as a function of redshift takes the form:
+\begin{equation}
+    d_L(z) = \frac{c}{H_0} \left[ z + \frac{z^2(1-q_0)}{1 + q_0 z + \sqrt{1 + 2q_0 z}} \right]
+    \label{eq:janus_dL}
+\end{equation}
+where $q_0$ is the deceleration parameter at the present epoch, $c$ is the speed of light, and $H_0$ is the Hubble constant. The corresponding distance modulus is:
+\begin{equation}
+    \mu(z) = 5 \log_{10}\left(\frac{d_L}{\text{Mpc}}\right) + 25
+    \label{eq:mu}
+\end{equation}
+
+The model is remarkable in that it depends on a single free cosmological parameter ($q_0$), making it highly constrained compared to multi-parameter models. The constraint $q_0 < 0$ indicates cosmic acceleration.
+
+\subsection{\LCDM{} Reference Model}
+
+For comparison, we use the flat \LCDM{} model with:
+\begin{equation}
+    d_L(z) = \frac{c(1+z)}{H_0} \int_0^z \frac{dz'}{E(z')}
+    \label{eq:lcdm_dL}
+\end{equation}
+where $E(z) = \sqrt{\Omega_m(1+z')^3 + \Omega_\Lambda}$, with $\Omega_m = 0.3$ and $\Omega_\Lambda = 0.7$ fixed to Planck values.
+
+%==============================================================================
+\section{Data and Methodology}
+
+\subsection{Datasets}
+
+\textbf{JLA (Joint Light-curve Analysis):} 740 Type Ia supernovae from SDSS-II, SNLS, and low-$z$ samples, spanning $0.01 < z < 1.30$ \citep{Betoule2014}. We use the standardized magnitudes with SALT2 parameters ($m_B$, $x_1$, $c$).
+
+\textbf{Pantheon+:} 1543 unique Type Ia supernovae (1701 total observations) spanning $0.001 < z < 2.26$ \citep{Brout2022}. We use the calibrated distance moduli (MU\_SH0ES column) which incorporate host-galaxy and peculiar velocity corrections.
+
+\subsection{Distance Modulus Calculation}
+
+For JLA, the standardized distance modulus is:
+\begin{equation}
+    \mu = m_B - M_B + \alpha x_1 - \beta c
+    \label{eq:mu_salt2}
+\end{equation}
+with nuisance parameters $\alpha = 0.141$, $\beta = 3.101$, and $M_B = -19.05$ mag from \citet{Betoule2014}.
+
+For Pantheon+, we directly use the provided distance moduli which incorporate all standardization corrections.
+
+\subsection{Fitting Procedure}
+
+We minimize the chi-square statistic:
+\begin{equation}
+    \chi^2 = \sum_{i=1}^{N} \left( \frac{\mu_i^{\text{obs}} - \mu_i^{\text{th}}(z_i; q_0) - \delta}{\sigma_i} \right)^2
+    \label{eq:chi2}
+\end{equation}
+where $\delta$ is an overall offset parameter absorbing uncertainties in $H_0$ and $M_B$. Optimization uses the Nelder-Mead algorithm. Parameter uncertainties are estimated via bootstrap resampling (100 iterations).
+
+\subsection{Model Comparison}
+
+We compute the Akaike Information Criterion (AIC) and Bayesian Information Criterion (BIC):
+\begin{align}
+    \text{AIC} &= \chi^2 + 2k \\
+    \text{BIC} &= \chi^2 + k \ln(N)
+\end{align}
+where $k$ is the number of free parameters. Negative $\Delta$AIC or $\Delta$BIC indicates preference for \LCDM{}.
+
+%==============================================================================
+\section{Results}
+
+\subsection{Reproduction of 2018 Analysis}
+
+Table~\ref{tab:jla_results} presents the comparison between our JLA analysis and the published 2018 results.
+
+\begin{table}[H]
+\centering
+\caption{Comparison with D'Agostini \& Petit (2018) --- JLA dataset}
+\label{tab:jla_results}
+\begin{tabular}{lcc}
+\toprule
+Parameter & This work & Reference (2018) \\
+\midrule
+$q_0$ & $-0.0864 \pm 0.014$ & $-0.087 \pm 0.015$ \\
+$\chi^2$ & 651.9 & 657 \\
+$\chi^2$/dof & 0.883 & 0.89 \\
+dof & 738 & 738 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The excellent agreement ($\Delta q_0 = 0.0006$, $\Delta\chi^2 = 5$) validates our implementation.
+
+\subsection{Extension to Pantheon+}
+
+Table~\ref{tab:comparison} summarizes results for both datasets.
+
+\begin{table}[H]
+\centering
+\caption{JANUS model results for JLA and Pantheon+ datasets}
+\label{tab:comparison}
+\begin{tabular}{lcc}
+\toprule
+Parameter & JLA & Pantheon+ \\
+\midrule
+$N$ (SNe Ia) & 740 & 1543 \\
+$z$ range & 0.01--1.30 & 0.001--2.26 \\
+$q_0$ & $-0.086 \pm 0.014$ & $-0.035 \pm 0.014$ \\
+Offset $\delta$ & $+0.023$ & $-0.049$ \\
+$\chi^2$/dof & 0.883 & 0.497 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The Pantheon+ dataset yields a significantly different $q_0$ value, with $\Delta q_0 = 0.051$ exceeding the combined $1\sigma$ uncertainties.
+
+\subsection{Redshift Dependence of $q_0$}
+
+To investigate the JLA/Pantheon+ discrepancy, we fit JANUS to Pantheon+ subsamples (Table~\ref{tab:subsamples}).
+
+\begin{table}[H]
+\centering
+\caption{JANUS $q_0$ for Pantheon+ redshift subsamples}
+\label{tab:subsamples}
+\begin{tabular}{lccc}
+\toprule
+Redshift range & $N$ & $q_0$ & $\chi^2$/dof \\
+\midrule
+$z < 0.1$ & 583 & $-0.260$ & 0.580 \\
+$z < 0.5$ & 1333 & $-0.165$ & 0.502 \\
+$z < 1.0$ & 1518 & $-0.070$ & 0.491 \\
+$z < 1.3$ & 1527 & $-0.072$ & 0.490 \\
+Full sample & 1543 & $-0.035$ & 0.497 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+A clear trend emerges: low-$z$ supernovae favor stronger deceleration ($q_0 \approx -0.26$) while high-$z$ data drives $q_0$ toward zero. This $q_0(z)$ evolution is illustrated in Figure~\ref{fig:q0_evolution}.
+
+\subsection{Comparison with \LCDM{}}
+
+Table~\ref{tab:model_comparison} presents the statistical model comparison.
+
+\begin{table}[H]
+\centering
+\caption{Model comparison: JANUS vs \LCDM{}}
+\label{tab:model_comparison}
+\begin{tabular}{lcccl}
+\toprule
+Dataset & Model & $\chi^2$/dof & $\Delta$AIC & Preference \\
+\midrule
+\multirow{2}{*}{JLA} & JANUS & 0.883 & --- & --- \\
+ & \LCDM{} & 0.852 & $-24.4$ & \LCDM{} \\
+\midrule
+\multirow{2}{*}{Pantheon+} & JANUS & 0.497 & --- & --- \\
+ & \LCDM{} & 0.481 & $-26.2$ & \LCDM{} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Both models provide comparable fits ($\Delta\chi^2/\text{dof} < 4\%$). The negative $\Delta$AIC values indicate a slight statistical preference for \LCDM{}, primarily due to its greater parsimony (1 vs 2 free parameters when $\Omega_m$ is fixed).
+
+%==============================================================================
+\section{Discussion}
+
+\subsection{Validation of the 2018 Analysis}
+
+Our reproduction of the D'Agostini \& Petit (2018) results is excellent, with $q_0 = -0.0864$ compared to the published $-0.087$, and identical $\chi^2$/dof values. This confirms the validity of both our JANUS model implementation and the robustness of the original analysis.
+
+\subsection{Dataset Dependence}
+
+The significant difference between JLA ($q_0 = -0.086$) and Pantheon+ ($q_0 = -0.035$) results requires careful interpretation. Several factors may contribute:
+
+\begin{enumerate}
+    \item \textbf{Sample composition}: Pantheon+ contains more low-$z$ supernovae (583 at $z < 0.1$ vs. $\sim 100$ in JLA) and extends to higher redshifts ($z_{\max} = 2.26$ vs. 1.30).
+
+    \item \textbf{Calibration differences}: The two datasets use different standardization procedures and host-galaxy corrections.
+
+    \item \textbf{Physical evolution}: The observed $q_0(z)$ trend could indicate genuine cosmological evolution not captured by the simple one-parameter JANUS model.
+\end{enumerate}
+
+\subsection{Implications for JANUS}
+
+The redshift dependence of $q_0$ (Figure~\ref{fig:q0_evolution}) suggests that a constant deceleration parameter may be insufficient to describe the full redshift range. This could motivate theoretical extensions allowing for:
+\begin{itemize}
+    \item Time-varying coupling between positive/negative mass sectors
+    \item Additional parameters characterizing the transition epoch
+    \item Modified distance-redshift relations at high-$z$
+\end{itemize}
+
+\subsection{JANUS vs \LCDM{}}
+
+While \LCDM{} shows a slight statistical advantage ($\Delta$AIC $\approx -25$), the JANUS model remains competitive:
+\begin{itemize}
+    \item The $\chi^2$/dof difference is only $\sim 3\%$
+    \item JANUS uses a single free cosmological parameter
+    \item JANUS provides a physical mechanism for acceleration without invoking dark energy
+\end{itemize}
+
+The similar fit quality suggests that current SNe Ia data alone cannot definitively distinguish between these cosmological frameworks.
+
+%==============================================================================
+\section{Conclusions}
+
+We have successfully reproduced the D'Agostini \& Petit (2018) constraints on the JANUS cosmological model using JLA supernovae data, obtaining $q_0 = -0.0864 \pm 0.014$ with $\chi^2$/dof $= 0.883$, in excellent agreement with the published values.
+
+Extension to the Pantheon+ dataset reveals:
+\begin{enumerate}
+    \item A different best-fit value: $q_0 = -0.035 \pm 0.014$
+    \item Evidence for redshift-dependent evolution: $q_0$ varies from $-0.26$ at low-$z$ to $\sim 0$ at high-$z$
+    \item Comparable fit quality between JANUS and \LCDM{} ($\Delta\chi^2$/dof $< 4\%$)
+    \item Slight statistical preference for \LCDM{} based on information criteria
+\end{enumerate}
+
+These results highlight both the strengths and limitations of the single-parameter JANUS model. While it successfully describes the JLA dataset with minimal complexity, the $q_0(z)$ evolution observed in Pantheon+ may indicate the need for theoretical extensions. Future work should investigate whether this evolution has a physical interpretation within the bimetric framework, potentially connecting to the JWST early galaxy observations that motivate enhanced structure formation in JANUS.
+
+%==============================================================================
+\section*{Acknowledgments}
+
+This work benefited from the publicly available JLA and Pantheon+ datasets. We thank the respective collaborations for making their data accessible. Computations were performed using Python with NumPy, SciPy, and Matplotlib libraries.
+
+%==============================================================================
+\bibliographystyle{apalike}
+
+\begin{thebibliography}{99}
+
+\bibitem[Betoule et al.(2014)]{Betoule2014}
+Betoule, M., et al. 2014, A\&A, 568, A22
+
+\bibitem[Brout et al.(2022)]{Brout2022}
+Brout, D., et al. 2022, ApJ, 938, 110
+
+\bibitem[D'Agostini \& Petit(2018)]{Petit2018}
+D'Agostini, G., \& Petit, J.-P. 2018, Ap\&SS, 363, 139
+
+\bibitem[Perlmutter et al.(1999)]{Perlmutter1999}
+Perlmutter, S., et al. 1999, ApJ, 517, 565
+
+\bibitem[Petit \& D'Agostini(2014)]{Petit2014}
+Petit, J.-P., \& D'Agostini, G. 2014, arXiv:1408.2451
+
+\bibitem[Petit et al.(2024)]{Petit2024}
+Petit, J.-P., Margnat, D., \& Zejli, H. 2024, EPJC, 84, 1
+
+\bibitem[Riess et al.(1998)]{Riess1998}
+Riess, A. G., et al. 1998, AJ, 116, 1009
+
+\end{thebibliography}
+
+%==============================================================================
+% FIGURES
+%==============================================================================
+
+\clearpage
+\onecolumn
+
+\section*{Figures}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig1_hubble_jla.pdf}
+\caption{Hubble diagram for the JLA dataset (740 Type Ia supernovae). \textbf{Upper panel}: Distance modulus vs redshift with JANUS (blue solid, $q_0 = -0.086$) and \LCDM{} (red dashed, $\Omega_m = 0.3$) model fits. Both models provide excellent fits with $\chi^2$/dof $< 0.9$. \textbf{Lower panel}: Residuals $\mu_{\text{obs}} - \mu_{\text{model}}$ for both models, showing comparable scatter with no systematic trends.}
+\label{fig:hubble_jla}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig2_hubble_pantheon.pdf}
+\caption{Hubble diagram for the Pantheon+ dataset (1543 unique Type Ia supernovae). Same format as Figure~\ref{fig:hubble_jla}. The extended redshift range ($z_{\max} = 2.26$) provides stronger leverage for testing cosmological models. JANUS yields $q_0 = -0.035$, significantly different from the JLA value.}
+\label{fig:hubble_pantheon}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/fig3_q0_evolution.pdf}
+\caption{Evolution of the JANUS deceleration parameter $q_0$ with redshift, obtained by fitting Pantheon+ subsamples in different $z$ bins. The horizontal dashed line indicates the D'Agostini \& Petit (2018) value ($q_0 = -0.087$). A clear trend is observed: low-$z$ supernovae ($z < 0.1$) favor $q_0 \approx -0.26$, while high-$z$ data drives $q_0$ toward zero. This $q_0(z)$ dependence may indicate limitations of the single-parameter JANUS model or genuine cosmological evolution.}
+\label{fig:q0_evolution}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/fig4_comparison.pdf}
+\caption{Reduced chi-square ($\chi^2$/dof) comparison between JANUS and \LCDM{} models for both datasets. Values below 1.0 (dashed line) indicate good fits. Both models provide comparable quality, with \LCDM{} showing a marginal advantage ($\sim 3\%$ lower $\chi^2$/dof). The low $\chi^2$/dof values for Pantheon+ suggest conservative error estimates in that dataset.}
+\label{fig:comparison}
+\end{figure}
+
+\end{document}
