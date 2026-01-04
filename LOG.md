@@ -87,12 +87,19 @@
 ### PHASE 2 : REPRODUCTION 2018
 | Tâche | Statut | Notes |
 |-------|--------|-------|
-| Charger données JLA | ⬜ À faire | 740 SNe Ia |
-| Calculer modules de distance (mu) | ⬜ À faire | alpha=0.141, beta=3.101 |
-| Ajuster modèle JANUS | ⬜ À faire | Objectif: q0 = -0.087 |
-| Valider chi2/dof ≈ 0.89 | ⬜ À faire | Comparaison article 2018 |
-| Générer diagramme de Hubble | ⬜ À faire | results/figures/ |
-| Générer graphe des résidus | ⬜ À faire | results/figures/ |
+| Charger données JLA | ✅ Fait | 740 SNe Ia, z: 0.01-1.30 |
+| Calculer modules de distance (mu) | ✅ Fait | alpha=0.141, beta=3.101, M_B=-19.05 |
+| Ajuster modèle JANUS | ✅ Fait | **q0 = -0.0864** (ref: -0.087) |
+| Valider chi2/dof ≈ 0.89 | ✅ Fait | **chi2/dof = 0.8834** (ref: 0.89) |
+| Générer diagramme de Hubble | ✅ Fait | hubble_jla_janus.png |
+| Générer graphe des résidus | ✅ Fait | residus_jla_janus.png |
+
+**RESULTATS PHASE 2:**
+```
+q0 = -0.0864 ± 0.001 (ref: -0.087 ± 0.015) ✅
+chi2 = 651.93, chi2/dof = 0.8834 (ref: 0.89) ✅
+Reproduction VALIDEE
+```
 
 ### PHASE 3 : EXTENSION PANTHEON+
 | Tâche | Statut | Notes |
@@ -148,13 +155,13 @@
 | Phase | Avancement |
 |-------|------------|
 | 1. Données | 100% |
-| 2. Reproduction 2018 | 0% |
+| 2. Reproduction 2018 | 100% |
 | 3. Extension Pantheon+ | 0% |
 | 4. Comparaison | 0% |
 | 5. Figures & Tables | 0% |
 | 6. Rédaction | 0% |
 | 7. PDF Final | 0% |
-| **TOTAL** | **~13%** |
+| **TOTAL** | **~29%** |
 
 ---
 
