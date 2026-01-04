@@ -56,7 +56,8 @@
 | -- | Ajout : données post-2018 (Pantheon+, DES) | ✅ Succès |
 | -- | Ajout : méthodologie de reproduction | ✅ Succès |
 | -- | Régénération PDF v2 (54 KB) | ✅ Succès |
-| -- | Commit v2 du document de synthèse | ⏳ En cours |
+| -- | Commit v2 du document de synthèse | ✅ Succès |
+| -- | Push v2 vers GitHub | ✅ Succès |
 
 ---
 
