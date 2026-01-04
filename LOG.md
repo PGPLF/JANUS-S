@@ -58,6 +58,34 @@
 | -- | Régénération PDF v2 (54 KB) | ✅ Succès |
 | -- | Commit v2 du document de synthèse | ✅ Succès |
 | -- | Push v2 vers GitHub | ✅ Succès |
+| -- | Analyse du plan de reproduction (Grok) | ✅ Succès |
+| -- | Création PLAN_PUBLICATION_COMPARATIVE.md | ✅ Succès |
+| -- | Création structure publications/code/results | ✅ Succès |
+| -- | Création janus_model.py (modèle JANUS + Lambda-CDM) | ✅ Succès |
+| -- | Création data_loader.py (chargement JLA/Pantheon+) | ✅ Succès |
+| -- | Création fitting.py (ajustement chi-2, comparaison) | ✅ Succès |
+| -- | Commit v3 : Plan publication + code base | ⏳ En cours |
+
+---
+
+## PLAN DE PUBLICATION
+
+**Objectif :** Publication comparative reproduction 2018 + validation Pantheon+
+
+**Phases :**
+1. Préparation (datasets, environnement)
+2. Reproduction article 2018 (JLA, 740 SNe)
+3. Extension Pantheon+ (1550 SNe)
+4. Comparaison JANUS vs Lambda-CDM (AIC, BIC)
+5. Analyse MCMC (erreurs bayésiennes)
+6. Rédaction article LaTeX
+7. Production PDF final
+
+**Fichiers créés :**
+- `publications/PLAN_PUBLICATION_COMPARATIVE.md`
+- `code/janus_model.py`
+- `code/data_loader.py`
+- `code/fitting.py`
 
 ---
 
