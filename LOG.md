@@ -46,7 +46,9 @@
 | -- | Création document de synthèse (Markdown) | ✅ Succès |
 | -- | Installation de pandoc via Homebrew | ✅ Succès |
 | -- | Conversion du document en PDF (129 KB) | ✅ Succès |
-| -- | Initialisation Git et synchronisation GitHub | ⏳ En cours |
+| -- | Initialisation Git local | ✅ Succès |
+| -- | Création du dépôt GitHub (PGPLF/JANUS-S) | ✅ Succès |
+| -- | Push initial vers GitHub | ✅ Succès |
 
 ---
 
@@ -65,4 +67,6 @@
 ## NOTES
 
 Ce projet vise à reproduire et compléter les travaux de Jean-Pierre Petit sur l'application du modèle cosmologique JANUS aux observations des supernovae de type Ia, en vue de publications scientifiques.
+
+**Dépôt GitHub :** https://github.com/PGPLF/JANUS-S
 
