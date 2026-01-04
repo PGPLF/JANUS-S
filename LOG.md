@@ -49,6 +49,14 @@
 | -- | Initialisation Git local | ✅ Succès |
 | -- | Création du dépôt GitHub (PGPLF/JANUS-S) | ✅ Succès |
 | -- | Push initial vers GitHub | ✅ Succès |
+| -- | Enrichissement synthèse (réflexions Grok) | ✅ Succès |
+| -- | Ajout : comparaison JANUS/Lambda-CDM | ✅ Succès |
+| -- | Ajout : protocole détaillé article 2018 | ✅ Succès |
+| -- | Ajout : équations du modèle | ✅ Succès |
+| -- | Ajout : données post-2018 (Pantheon+, DES) | ✅ Succès |
+| -- | Ajout : méthodologie de reproduction | ✅ Succès |
+| -- | Régénération PDF v2 (54 KB) | ✅ Succès |
+| -- | Commit v2 du document de synthèse | ⏳ En cours |
 
 ---
 
