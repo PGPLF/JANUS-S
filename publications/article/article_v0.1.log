@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2026.1.3)  4 JAN 2026 19:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2026.1.3)  4 JAN 2026 19:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -356,6 +356,25 @@ Package: natbib 2010/09/13 8.31b (PWD, AO)
 LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count301
 )
+(/usr/local/texlive/2025basic/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2024/09/29 v3.02 LaTeX color extensions (UK)
+
+(/usr/local/texlive/2025basic/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 274.
+
+(/usr/local/texlive/2025basic/texmf-dist/tex/latex/graphics/mathcolor.ltx)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1349.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1353.
+Package xcolor Info: Model `RGB' extended on input line 1365.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1367.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1370.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1371.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1372.
+)
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count302
@@ -364,7 +383,7 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \@float@everytoks=\toks27
 \@floatcapt=\box55
 )
-LaTeX Font Info:    Trying to load font information for T1+lmr on input line 27
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 38
 .
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/lm/t1lmr.fd
@@ -378,24 +397,24 @@ File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
 ) (./article_v0.1.aux)
 \openout1 = `article_v0.1.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -421,7 +440,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring OFF on input line 27.
+Package hyperref Info: Link coloring OFF on input line 38.
  (./article_v0.1.out) (./article_v0.1.out)
 \@outlinefile=\write3
 \openout3 = `article_v0.1.out'.
@@ -461,144 +480,219 @@ Package hyperref Info: Link coloring OFF on input line 27.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 2
-9.
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 4
+1.
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 2
-9.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 4
+1.
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-29.
+41.
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-29.
+41.
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 29.
+(Font)              <12> on input line 41.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 29.
+(Font)              <8> on input line 41.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 29.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 29.
+(Font)              <6> on input line 41.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 41.
 
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 29.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 41.
 
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 2
-9.
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 4
+1.
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 2
-9.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <9> on input line 41.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 41.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 4
+1.
 
 (/usr/local/texlive/2025basic/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 29.
+(Font)              <10> on input line 44.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 29.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 31.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 31.
+(Font)              <7> on input line 44.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 
 
 
 
 [1{/usr/local/texlive/2025basic/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/
 usr/local/texlive/2025basic/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local
-/texlive/2025basic/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}
+/texlive/2025basic/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/local/texlive
+/2025basic/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}
 
 
 {/usr/local/texlive/2025basic/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr
-/local/texlive/2025basic/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/te
-xlive/2025basic/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive
-/2025basic/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}
+/local/texlive/2025basic/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 83.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\Lambda' on input line 83.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 83.
+
+
+
+
+
+[2{/usr/local/texlive/2025basic/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}
 pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has
  been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.103 
-      
+l.178 \subsection
+                 {Redshift Dependence of $q_0$}
 pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has
  been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.103 
-      ]
+l.178 \subsection
+                 {Redshift Dependence of $q_0$}]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 104.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\Lambda' on input line 104.
+(hyperref)                removing `math shift' on input line 178.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 104.
+(hyperref)                removing `subscript' on input line 178.
 
 
-Underfull \hbox (badness 2884) in paragraph at lines 122--123
-[]\T1/lmr/m/n/10 The $\OML/lmm/m/it/10 q[]$ \T1/lmr/m/n/10 red-shift trend (Fig
-. []3[]) sug-gests single-
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 178.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 201.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\Lambda' on input line 201.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 201.
+
+! Undefined control sequence.
+<recently read> \multirow 
+                          
+l.213 \multirow
+               {2}{*}{JLA} & JANUS & 0.883 & --- & --- \\
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+<recently read> \multirow 
+                          
+l.216 \multirow
+               {2}{*}{Pantheon+} & JANUS & 0.497 & --- & --- \\
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+Overfull \hbox (8.47273pt too wide) in paragraph at lines 209--220
+ [][] 
  []
 
-(./article_v0.1.bbl
 
-)
 
-[2
+
+Underfull \hbox (badness 1810) in paragraph at lines 240--241
+\T1/lmr/m/n/10 cap-tured by the sim-ple one-parameter JANUS
+ []
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 252.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\Lambda' on input line 252.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 252.
+
+
+
+[3
 pdfTeX warning (ext4): destination with the same identifier (name{table.3}) has
  been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.141 \clearpage
-                
+l.274 \end{enumerate}
+                     
 pdfTeX warning (ext4): destination with the same identifier (name{table.4}) has
  been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.141 \clearpage
-                ]
-<figures/fig1_hubble_jla.pdf, id=110, 509.78265pt x 509.08759pt>
+l.274 \end{enumerate}
+                     ]
+
+
+
+[4
+
+]
+<figures/fig1_hubble_jla.pdf, id=185, 509.78265pt x 509.08759pt>
 File: figures/fig1_hubble_jla.pdf Graphic file (type pdf)
 <use figures/fig1_hubble_jla.pdf>
-Package pdftex.def Info: figures/fig1_hubble_jla.pdf  used on input line 147.
-(pdftex.def)             Requested size: 400.38872pt x 399.8366pt.
-<figures/fig2_hubble_pantheon.pdf, id=111, 509.78265pt x 509.08759pt>
+Package pdftex.def Info: figures/fig1_hubble_jla.pdf  used on input line 322.
+(pdftex.def)             Requested size: 425.41444pt x 424.83415pt.
+<figures/fig2_hubble_pantheon.pdf, id=186, 509.78265pt x 509.08759pt>
 File: figures/fig2_hubble_pantheon.pdf Graphic file (type pdf)
 <use figures/fig2_hubble_pantheon.pdf>
-Package pdftex.def Info: figures/fig2_hubble_pantheon.pdf  used on input line 1
-54.
-(pdftex.def)             Requested size: 400.38872pt x 399.8366pt.
+Package pdftex.def Info: figures/fig2_hubble_pantheon.pdf  used on input line 3
+29.
+(pdftex.def)             Requested size: 425.41444pt x 424.83415pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[3
+[5
 
 
 
@@ -606,45 +700,45 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.158 
+l.333 
        <./figures/fig1_hubble_jla.pdf>]
-<figures/fig3_q0_evolution.pdf, id=186, 517.37352pt x 342.17525pt>
+<figures/fig3_q0_evolution.pdf, id=263, 517.37352pt x 342.17525pt>
 File: figures/fig3_q0_evolution.pdf Graphic file (type pdf)
 <use figures/fig3_q0_evolution.pdf>
-Package pdftex.def Info: figures/fig3_q0_evolution.pdf  used on input line 161.
+Package pdftex.def Info: figures/fig3_q0_evolution.pdf  used on input line 336.
 
-(pdftex.def)             Requested size: 325.31154pt x 215.15907pt.
+(pdftex.def)             Requested size: 350.33727pt x 231.71017pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[4
+[6
 pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.165 
+l.340 
        <./figures/fig2_hubble_pantheon.pdf>]
-<figures/fig4_comparison.pdf, id=260, 503.58763pt x 326.49165pt>
+<figures/fig4_comparison.pdf, id=336, 503.58763pt x 326.49165pt>
 File: figures/fig4_comparison.pdf Graphic file (type pdf)
 <use figures/fig4_comparison.pdf>
-Package pdftex.def Info: figures/fig4_comparison.pdf  used on input line 168.
-(pdftex.def)             Requested size: 325.31154pt x 210.91678pt.
+Package pdftex.def Info: figures/fig4_comparison.pdf  used on input line 343.
+(pdftex.def)             Requested size: 350.33727pt x 227.14268pt.
 
 
-[5
+[7
 pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.173 \end{document}
+l.348 \end{document}
                     
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.173 \end{document}
+l.348 \end{document}
                      <./figures/fig3_q0_evolution.pdf> <./figures/fig4_comparis
 on.pdf>] (./article_v0.1.aux)
  ***********
@@ -652,34 +746,35 @@ LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `article_v0.1.out' has not changed.
-(rerunfilecheck)             Checksum: EFB6D0F4134DD621B38A7DEFE3F911ED;1315.
+(rerunfilecheck)             Checksum: 013CB9DC5C6666EA73B99AD46B943C0D;3012.
  ) 
 Here is how much of TeX's memory you used:
- 11224 strings out of 474662
- 171351 string characters out of 5751110
- 578620 words of memory out of 5000000
- 34039 multiletter control sequences out of 15000+600000
- 636433 words of font info for 91 fonts, out of 8000000 for 9000
+ 11738 strings out of 474662
+ 178694 string characters out of 5751110
+ 593864 words of memory out of 5000000
+ 34523 multiletter control sequences out of 15000+600000
+ 632535 words of font info for 91 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
- 75i,13n,79p,613b,520s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,13n,79p,1183b,530s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></u
 sr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/lo
 cal/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmex10.pfb></usr/local/t
 exlive/2025basic/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texliv
-e/2025basic/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></usr/local/texlive/2025
-basic/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2025basic/
-texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2025basic/texmf-
-dist/fonts/type1/public/lm/lmr6.pfb></usr/local/texlive/2025basic/texmf-dist/fo
-nts/type1/public/lm/lmr7.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/typ
-e1/public/lm/lmr8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/publ
-ic/lm/lmr9.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm/l
-mri10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmri9.
+e/2025basic/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></usr/local/texlive/202
+5basic/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></usr/local/texlive/2025basic
+/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2025basic/texmf
+-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2025basic/texmf-dist/
+fonts/type1/public/lm/lmr6.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/t
+ype1/public/lm/lmr7.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/pu
+blic/lm/lmr8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm
+/lmr9.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmri9.
 pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><
-/usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmtt9.pfb>
-Output written on article_v0.1.pdf (5 pages, 508878 bytes).
+/usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></usr/l
+ocal/texlive/2025basic/texmf-dist/fonts/type1/public/lm/lmtt9.pfb>
+Output written on article_v0.1.pdf (7 pages, 528883 bytes).
 PDF statistics:
- 477 PDF objects out of 1000 (max. 8388607)
- 224 compressed objects within 3 object streams
- 40 named destinations out of 1000 (max. 500000)
- 117 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 570 PDF objects out of 1000 (max. 8388607)
+ 308 compressed objects within 4 object streams
+ 64 named destinations out of 1000 (max. 500000)
+ 181 words of extra memory for PDF output out of 10000 (max. 10000000)
 
