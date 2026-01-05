@@ -236,11 +236,32 @@ class LambdaCDM:
         """Fonction E(z) = H(z)/H0"""
         return np.sqrt(self.Omega_m * (1 + z)**3 + self.Omega_L)
 
-    def distance_modulus(self, z: ArrayLike, offset: float = 0.0) -> ArrayLike:
+    def distance_modulus(self, z: ArrayLike, Omega_m: float = None,
+                         offset: float = 0.0) -> ArrayLike:
         """
         Module de distance dans Lambda-CDM (integration numerique)
+
+        Parametres
+        ----------
+        z : array-like
+            Redshifts
+        Omega_m : float, optional
+            Densite de matiere (utilise self.Omega_m si None)
+        offset : float
+            Offset en magnitude
         """
         from scipy.integrate import quad
+
+        # Use provided Omega_m or instance value
+        if Omega_m is None:
+            Om = self.Omega_m
+            OL = self.Omega_L
+        else:
+            Om = Omega_m
+            OL = 1.0 - Omega_m  # Flat universe
+
+        def E_local(zp):
+            return np.sqrt(Om * (1 + zp)**3 + OL)
 
         z = np.atleast_1d(z)
         d_H = self.c / self.H0  # Distance de Hubble en Mpc
@@ -252,7 +273,7 @@ class LambdaCDM:
                 continue
 
             # Integration numerique
-            integral, _ = quad(lambda x: 1/self.E(x), 0, zi)
+            integral, _ = quad(lambda x: 1/E_local(x), 0, zi)
             d_L = d_H * (1 + zi) * integral
             mu[i] = 5 * np.log10(d_L) + 25
 

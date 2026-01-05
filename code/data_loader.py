@@ -484,6 +484,261 @@ def filter_data(data: Dict,
     return filtered
 
 
+def load_des_sn5yr(data_path: str = 'data/des_sn5yr/DES-Dovekie_HD.csv',
+                   cov_path: str = 'data/des_sn5yr/STAT+SYS.npz',
+                   verbose: bool = True) -> Dict:
+    """
+    Charge le dataset DES-SN5YR (1820 supernovae)
+
+    Parametres
+    ----------
+    data_path : str
+        Chemin vers le fichier DES-Dovekie_HD.csv
+    cov_path : str
+        Chemin vers le fichier STAT+SYS.npz (contient matrice de PRECISION)
+    verbose : bool
+        Afficher les informations
+
+    Retourne
+    --------
+    data : dict
+        Dictionnaire avec donnees + covariance + precision
+
+    Notes
+    -----
+    Format DES specifique:
+    - Lignes commencant par 'SN:' contiennent les donnees
+    - IMPORTANT: Le fichier .npz contient la MATRICE DE PRECISION
+      (inverse de la covariance), pas la covariance directe!
+    - Format: triangulaire superieur, stocke par lignes
+    """
+    path = Path(data_path)
+
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Fichier non trouve: {data_path}\n"
+            "Telechargez depuis: https://github.com/des-science/DES-SN5YR"
+        )
+
+    # Parser le fichier HD
+    lines = open(data_path, 'r').readlines()
+    data_lines = [l for l in lines if l.startswith('SN:')]
+
+    records = []
+    for line in data_lines:
+        parts = line.replace('SN:', '').strip().split()
+        records.append({
+            'CID': parts[0],
+            'IDSURVEY': int(parts[1]),
+            'zHD': float(parts[2]),
+            'zHEL': float(parts[3]),
+            'MU': float(parts[4]),
+            'MUERR': float(parts[5]),
+            'MUERR_VPEC': float(parts[6]),
+            'MUERR_SYS': float(parts[7]),
+            'PROBIA_BEAMS': float(parts[8])
+        })
+
+    df = pd.DataFrame(records)
+
+    # Charger la matrice de precision
+    cov = None
+    precision = None
+    sigma_mu = df['MUERR'].values
+
+    cov_file = Path(cov_path)
+    if cov_file.exists():
+        try:
+            cov_data = np.load(cov_path)
+            nsn = int(cov_data['nsn'][0])
+            prec_flat = cov_data['cov']  # C'est la PRECISION, pas la covariance!
+
+            # Reconstruire la matrice triangulaire (precision)
+            precision = np.zeros((nsn, nsn))
+            idx = 0
+            for i in range(nsn):
+                for j in range(i, nsn):
+                    if idx < len(prec_flat):
+                        precision[i, j] = prec_flat[idx]
+                        precision[j, i] = prec_flat[idx]
+                        idx += 1
+
+            # Verifier coherence
+            if nsn != len(df):
+                warnings.warn(
+                    f"Incoherence: {len(df)} SNe dans HD vs {nsn} dans precision"
+                )
+                if len(df) < nsn:
+                    precision = precision[:len(df), :len(df)]
+
+            # Inverser pour obtenir la covariance
+            # (necessaire pour compatibilite avec le reste du code)
+            if verbose:
+                print(f"Matrice de precision DES-SN5YR chargee: {precision.shape}")
+                print("Inversion pour obtenir la covariance...")
+
+            try:
+                cov = np.linalg.inv(precision)
+                if verbose:
+                    print(f"Covariance obtenue: diag = [{cov[0,0]:.4f}, ..., {cov[-1,-1]:.4f}]")
+            except np.linalg.LinAlgError:
+                warnings.warn("Precision matrix singular, using pseudo-inverse")
+                cov = np.linalg.pinv(precision)
+
+        except Exception as e:
+            warnings.warn(f"Erreur chargement precision: {e}")
+            cov = None
+            precision = None
+
+    result = {
+        'z': df['zHD'].values,
+        'mu': df['MU'].values,
+        'sigma_mu': sigma_mu,
+        'covariance': cov,
+        'precision': precision,  # Garder la precision pour utilisation directe
+        'names': df['CID'].values,
+        'survey_id': df['IDSURVEY'].values,
+        'prob_ia': df['PROBIA_BEAMS'].values,
+        'n_sne': len(df),
+        'dataset': 'DES-SN5YR',
+        'reference': 'Sanchez et al. (2024), DES Collaboration (2024)'
+    }
+
+    if verbose:
+        print(f"\nDataset DES-SN5YR charge: {result['n_sne']} supernovae")
+        print(f"Plage redshift: z = [{result['z'].min():.4f}, {result['z'].max():.4f}]")
+        print(f"Plage mu: [{result['mu'].min():.2f}, {result['mu'].max():.2f}]")
+
+        # Repartition par survey
+        survey_names = {5:'CSP', 10:'DES', 61:'CFA1', 62:'CFA2', 63:'CFA3S',
+                       64:'CFA3K', 65:'CFA4p2', 66:'CFA4p3', 150:'FOUND'}
+        print("Repartition:")
+        for sid in sorted(df['IDSURVEY'].unique()):
+            n = (df['IDSURVEY'] == sid).sum()
+            name = survey_names.get(sid, f'Survey{sid}')
+            print(f"  {name}: {n} SNe")
+
+    return result
+
+
+def combine_datasets(pantheon_data: Dict, des_data: Dict,
+                     method: str = 'priority_des',
+                     verbose: bool = True) -> Dict:
+    """
+    Combine Pantheon+ et DES-SN5YR en evitant les doublons
+
+    Parametres
+    ----------
+    pantheon_data : dict
+        Donnees Pantheon+ (from load_pantheon_with_covariance)
+    des_data : dict
+        Donnees DES-SN5YR (from load_des_sn5yr)
+    method : str
+        Methode de combinaison:
+        - 'priority_des': DES prioritaire (plus recent)
+        - 'priority_pantheon': Pantheon+ prioritaire
+        - 'union': Garder toutes les SNe uniques
+    verbose : bool
+        Afficher les informations
+
+    Retourne
+    --------
+    combined : dict
+        Dataset combine avec covariance diagonale
+
+    Notes
+    -----
+    La covariance combinee est construite comme bloc-diagonale
+    (correlations croisees ignorees = approximation conservatrice)
+    """
+    # Identifier les SNe par nom (CID)
+    pantheon_names = set(str(n) for n in pantheon_data['names'])
+    des_names = set(str(n) for n in des_data['names'])
+
+    # Doublons potentiels
+    common = pantheon_names.intersection(des_names)
+
+    if verbose:
+        print(f"\nCombinaison des datasets:")
+        print(f"  Pantheon+: {len(pantheon_names)} SNe")
+        print(f"  DES-SN5YR: {len(des_names)} SNe")
+        print(f"  Noms communs: {len(common)}")
+
+    # Selectionner les indices
+    if method == 'priority_des':
+        # Garder DES complet + Pantheon non-DES
+        des_mask = np.ones(len(des_data['z']), dtype=bool)
+        pantheon_mask = np.array([str(n) not in des_names
+                                   for n in pantheon_data['names']])
+    elif method == 'priority_pantheon':
+        # Garder Pantheon complet + DES non-Pantheon
+        pantheon_mask = np.ones(len(pantheon_data['z']), dtype=bool)
+        des_mask = np.array([str(n) not in pantheon_names
+                              for n in des_data['names']])
+    else:  # union - moyenne pour doublons
+        pantheon_mask = np.ones(len(pantheon_data['z']), dtype=bool)
+        des_mask = np.array([str(n) not in pantheon_names
+                              for n in des_data['names']])
+
+    # Combiner les arrays
+    z_combined = np.concatenate([
+        pantheon_data['z'][pantheon_mask],
+        des_data['z'][des_mask]
+    ])
+    mu_combined = np.concatenate([
+        pantheon_data['mu'][pantheon_mask],
+        des_data['mu'][des_mask]
+    ])
+    sigma_combined = np.concatenate([
+        pantheon_data['sigma_mu'][pantheon_mask],
+        des_data['sigma_mu'][des_mask]
+    ])
+    names_combined = np.concatenate([
+        pantheon_data['names'][pantheon_mask],
+        des_data['names'][des_mask]
+    ])
+
+    # Source tracking
+    source = np.concatenate([
+        np.full(pantheon_mask.sum(), 'Pantheon+'),
+        np.full(des_mask.sum(), 'DES-SN5YR')
+    ])
+
+    # Trier par redshift
+    sort_idx = np.argsort(z_combined)
+    z_combined = z_combined[sort_idx]
+    mu_combined = mu_combined[sort_idx]
+    sigma_combined = sigma_combined[sort_idx]
+    names_combined = names_combined[sort_idx]
+    source = source[sort_idx]
+
+    # Covariance diagonale (approximation)
+    n_total = len(z_combined)
+    cov_combined = np.diag(sigma_combined**2)
+
+    result = {
+        'z': z_combined,
+        'mu': mu_combined,
+        'sigma_mu': sigma_combined,
+        'covariance': cov_combined,
+        'names': names_combined,
+        'source': source,
+        'n_sne': n_total,
+        'dataset': 'Pantheon+ + DES-SN5YR',
+        'reference': 'Brout et al. (2022), Sanchez et al. (2024)'
+    }
+
+    if verbose:
+        n_pantheon = (source == 'Pantheon+').sum()
+        n_des = (source == 'DES-SN5YR').sum()
+        print(f"\nDataset combine: {n_total} SNe uniques")
+        print(f"  de Pantheon+: {n_pantheon}")
+        print(f"  de DES-SN5YR: {n_des}")
+        print(f"Plage redshift: z = [{z_combined.min():.4f}, {z_combined.max():.4f}]")
+
+    return result
+
+
 # Tests
 if __name__ == "__main__":
     print("Test du module data_loader.py")

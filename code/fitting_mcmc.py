@@ -97,12 +97,21 @@ class MCMCFitter:
         """Log-likelihood for JANUS model"""
         q0, offset = theta
 
+        # Physical constraint: 1 + 2*q0*z > 0 for all z
+        # With z_max ~ 2.26, need q0 > -0.22
+        q0_min = -1.0 / (2.0 * self.z.max() + 0.1)  # Small margin
+
         # Bounds check
-        if not (-0.5 < q0 < 0.0) or not (-10 < offset < 10):
+        if not (q0_min < q0 < 0.0) or not (-10 < offset < 10):
             return -np.inf
 
         # Theory prediction
         mu_theory = self.janus.distance_modulus(self.z, q0=q0)
+
+        # Check for invalid values (NaN/inf from sqrt of negative)
+        if not np.all(np.isfinite(mu_theory)):
+            return -np.inf
+
         residuals = self.mu_obs - mu_theory - offset
 
         if self.use_full_cov:
@@ -138,7 +147,9 @@ class MCMCFitter:
     def log_prior_janus(self, theta: np.ndarray) -> float:
         """Uniform prior for JANUS"""
         q0, offset = theta
-        if -0.5 < q0 < 0.0 and -10 < offset < 10:
+        # Physical constraint: q0 > -1/(2*z_max)
+        q0_min = -1.0 / (2.0 * self.z.max() + 0.1)
+        if q0_min < q0 < 0.0 and -10 < offset < 10:
             return 0.0
         return -np.inf
 
@@ -297,11 +308,14 @@ class MCMCFitter:
         """
         if model == 'janus':
             param_names = ['q0', 'offset']
-            bounds = [(-0.5, 0.0), (-5, 5)]
+            # Physical constraint: q0 > -1/(2*z_max) to keep sqrt positive
+            q0_min = -1.0 / (2.0 * self.z.max() + 0.1)  # ~-0.21 for Pantheon+
+            q0_range = -q0_min  # From q0_min to 0
+            bounds = [(q0_min, 0.0), (-5, 5)]
 
             def prior_transform(u):
                 # Transform from unit cube to parameter space
-                q0 = u[0] * 0.5 - 0.5  # [-0.5, 0]
+                q0 = u[0] * q0_range + q0_min  # [q0_min, 0]
                 offset = u[1] * 10 - 5  # [-5, 5]
                 return np.array([q0, offset])
 
